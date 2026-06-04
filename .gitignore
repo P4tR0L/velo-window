@@ -29,4 +29,5 @@ npm-debug.log*
 # Cursor (skills & local config are machine-specific)
 .cursor/skills/
 .cursor/rules/
+.cursor/prompts/
 .cursor/.10x-cli-manifest.json
