@@ -31,3 +31,12 @@ npm-debug.log*
 .cursor/rules/
 .cursor/prompts/
 .cursor/.10x-cli-manifest.json
+
+# from 10x-astro-starter
+.astro/
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.env.production
+.dev.vars
+.wrangler/
