@@ -1,4 +1,4 @@
-# 10x Astro Starter
+# Velo Window
 
 ![](./public/template.png)
 
@@ -23,8 +23,8 @@ A modern, opinionated starter template for building fast, accessible web applica
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/przeprogramowani/10x-astro-starter.git
-cd 10x-astro-starter
+git clone https://github.com/P4tR0L/velo-window.git
+cd velo-window
 ```
 
 2. Install dependencies:

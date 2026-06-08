@@ -32,7 +32,7 @@ npm-debug.log*
 .cursor/prompts/
 .cursor/.10x-cli-manifest.json
 
-# from 10x-astro-starter
+# from starter template
 .astro/
 yarn-debug.log*
 yarn-error.log*
