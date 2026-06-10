@@ -42,6 +42,94 @@ SUPABASE_KEY=<your-anon-key>
 - Supabase credentials available. Auth is null-guarded in [src/lib/supabase.ts](../../src/lib/supabase.ts), so it works once `SUPABASE_URL`/`SUPABASE_KEY` are set and degrades gracefully if they ever go missing.
 - No `supabase/migrations/` — nothing to migrate; Supabase Auth is built-in.
 
+## Prerequisites — configure the CLI and Supabase
+
+Do these once before Part A. They cover (1) the Wrangler/Cloudflare CLI and (2) the Supabase project + credentials. None of these touch repo code — they configure your local machine and external accounts.
+
+### 1. Toolchain
+
+- **Node.js v22.14.0** (matches `.nvmrc`). With nvm: `nvm install` then `nvm use` from the repo root. Verify: `node -v`.
+- **Install dependencies:** `npm ci` (clean, lockfile-exact) at the repo root. This also provides Wrangler — it's a dev dependency, so use it via `npx wrangler …` rather than a global install (keeps the version pinned by `package.json`). Verify: `npx wrangler --version` (expect `4.x`).
+
+### 2. Cloudflare CLI (Wrangler)
+
+1. **Have a Cloudflare account** (free tier is sufficient — see [infrastructure.md](../foundation/infrastructure.md)). Sign up at [dash.cloudflare.com](https://dash.cloudflare.com) if needed.
+2. **Authenticate — human/interactive step** (opens a browser to grant Wrangler access to your account):
+
+```bash
+npx wrangler login
+```
+
+3. **Confirm you're logged in** and on the right account:
+
+```bash
+npx wrangler whoami
+```
+
+Expect your email and account name/ID. If you belong to multiple accounts, set `CLOUDFLARE_ACCOUNT_ID` in your shell (or `wrangler.jsonc`) so deploys target the intended one.
+
+(CI/headless alternative — **not** needed for this manual flow: create an "Edit Cloudflare Workers" API token and export `CLOUDFLARE_API_TOKEN` instead of `wrangler login`. This is the path the deferred GitHub Actions deploy will use.)
+
+### 3. Supabase
+
+No DB migrations exist (`supabase/` has only `config.toml`), so there is **nothing to migrate** — Supabase Auth is built-in and only the project URL + anon key are required.
+
+1. **Create / open a Supabase project** at [supabase.com/dashboard](https://supabase.com/dashboard) (free tier is fine).
+2. **Grab the two credentials** from the dashboard → Project Settings → **API**:
+  - `SUPABASE_URL` = Project URL, e.g. `https://<your-ref>.supabase.co`
+  - `SUPABASE_KEY` = the **anon / public** key (not the `service_role` key — never ship that to the client/Worker).
+3. **Configure local dev** — copy the example file and fill in the two values:
+
+```bash
+cp .env.example .dev.vars
+```
+
+Then edit `.dev.vars` (gitignored) to:
+
+```
+SUPABASE_URL=https://<your-ref>.supabase.co
+SUPABASE_KEY=<your-anon-key>
+```
+
+  `.dev.vars` is what the Cloudflare `workerd` dev runtime reads (`npm run dev`); `.env` is the Node equivalent if you ever run outside `workerd`. Both are gitignored.
+4. **Auth redirect URLs** — in the Supabase dashboard → Authentication → URL Configuration, add your local origin (`http://localhost:4321`) and, after Part A, your `https://velo-window.<subdomain>.workers.dev` origin so email-confirmation links resolve correctly.
+5. **Smoke-test locally** before deploying: `npm run dev`, then exercise `/auth/signup` and `/auth/signin`. The client is null-guarded in [src/lib/supabase.ts](../../src/lib/supabase.ts), so wrong/missing values disable auth gracefully rather than crashing — if signin silently does nothing, re-check `.dev.vars`.
+
+The runtime Worker and auto-deploy builds get these same two values set as secrets/build variables in Parts A and B below.
+
+#### Local Supabase via Docker (optional — not required for deployment)
+
+**Not needed for this deploy plan.** The flow above uses a hosted Supabase project, and `supabase/` currently has only `config.toml` (no `migrations/`), so there is nothing to run or migrate locally. `npm run dev` already hits the hosted project with full `workerd` runtime fidelity.
+
+This becomes useful **later, when implementing business logic** — once you start writing real schema, RLS policies (a repo hard rule), or want to iterate offline without touching the shared project or burning free-tier quota. At that point:
+
+1. **Install Docker Desktop** and start it (the local Supabase stack runs as containers: Postgres + Auth + Studio + others).
+2. **Start the local stack** from the repo root:
+
+```bash
+npx supabase start
+```
+
+  First run pulls images (slow); afterwards it prints a local **API URL** (`http://127.0.0.1:54321`), an **anon key**, a **service_role key**, and a **Studio URL** (`http://127.0.0.1:54323`).
+3. **Point local dev at the local stack** — swap `.dev.vars` to the printed values (keep the hosted values somewhere handy so you can switch back):
+
+```
+SUPABASE_URL=http://127.0.0.1:54321
+SUPABASE_KEY=<local-anon-key-from-supabase-start>
+```
+
+4. **Develop schema with migrations** (this is what creates the `supabase/migrations/` directory the deploy plan currently notes as empty):
+
+```bash
+npx supabase migration new <short_description>   # YYYYMMDDHHmmss_<desc>.sql per repo convention
+npx supabase db reset                            # re-apply all migrations + seed to the local DB
+```
+
+5. **Promote to the hosted project** when ready: `npx supabase link --project-ref <your-ref>` then `npx supabase db push` to apply local migrations to the hosted database. (Schema changes are external state — they do **not** roll back with `wrangler rollback`; see Notes.)
+6. **Stop the stack** when done: `npx supabase stop`.
+
+Deployment itself is unaffected by any of this — the Worker always talks to the **hosted** Supabase via the secrets set in Part A, never to a local container.
+
 ## Part A — Manual deploy
 
 1. **Verify the production build locally** (catches `workerd`/bundle issues before hitting Cloudflare):
