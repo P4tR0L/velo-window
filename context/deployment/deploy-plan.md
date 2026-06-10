@@ -9,14 +9,14 @@ Target the Workers + Static Assets path recommended in [context/foundation/infra
 
 ## Checklist
 
-- [ ] Create local `.dev.vars` with `SUPABASE_URL` and `SUPABASE_KEY` (gitignored)
-- [ ] Run `npm run build` to verify the production Worker bundle builds cleanly
-- [ ] Human step: `npx wrangler login` (interactive browser auth)
-- [ ] Set runtime Worker secrets via `npx wrangler secret put SUPABASE_URL` and `SUPABASE_KEY`
-- [ ] Run `npx wrangler deploy` to create and deploy the velo-window Worker
-- [ ] Verify with `wrangler deployments list`, open the `workers.dev` URL, and test signin/signup
-- [ ] Human step: connect the Worker to the GitHub repo via Cloudflare Workers Builds (branch `main`, build `npm run build`, deploy `npx wrangler deploy`) and add `SUPABASE_*` build variables
-- [ ] Push a commit to `main` and confirm Workers Builds auto-builds and promotes a new Active Deployment
+- [x] Create local `.dev.vars` with `SUPABASE_URL` and `SUPABASE_KEY` (gitignored)
+- [x] Run `npm run build` to verify the production Worker bundle builds cleanly
+- [x] Human step: `npx wrangler login` (interactive browser auth)
+- [x] Set runtime Worker secrets via `npx wrangler secret put SUPABASE_URL` and `SUPABASE_KEY`
+- [x] Run `npx wrangler deploy` to create and deploy the velo-window Worker
+- [x] Verify with `wrangler deployments list`, open the `workers.dev` URL, and test signin/signup
+- [x] Human step: connect the Worker to the GitHub repo via Cloudflare Workers Builds (branch `main`, build `npm run build`, deploy `npx wrangler deploy`) and add `SUPABASE_`* build variables
+- [x] Push a commit to `main` and confirm Workers Builds auto-builds and promotes a new Active Deployment
 
 ## Supabase wiring (three places)
 
@@ -36,7 +36,7 @@ SUPABASE_KEY=<your-anon-key>
 
 ## Preconditions (already verified)
 
-- [astro.config.mjs](../../astro.config.mjs): `output: "server"` + `adapter: cloudflare()`, `SUPABASE_*` declared `optional`.
+- [astro.config.mjs](../../astro.config.mjs): `output: "server"` + `adapter: cloudflare()`, `SUPABASE_`* declared `optional`.
 - [wrangler.jsonc](../../wrangler.jsonc): `compatibility_flags: ["nodejs_compat"]`, `compatibility_date: "2026-05-08"`, `ASSETS` binding -> `./dist`, observability enabled.
 - Wrangler `4.98.0` installed but **not authenticated** (`wrangler whoami` -> not logged in).
 - Supabase credentials available. Auth is null-guarded in [src/lib/supabase.ts](../../src/lib/supabase.ts), so it works once `SUPABASE_URL`/`SUPABASE_KEY` are set and degrades gracefully if they ever go missing.
@@ -50,26 +50,26 @@ SUPABASE_KEY=<your-anon-key>
 npm run build
 ```
 
-2. **Authenticate Wrangler — human/interactive step** (opens a browser):
+1. **Authenticate Wrangler — human/interactive step** (opens a browser):
 
 ```bash
 npx wrangler login
 ```
 
-3. **Set runtime Worker secrets** (each command prompts for the value — paste it; the value is not stored in shell history):
+1. **Set runtime Worker secrets** (each command prompts for the value — paste it; the value is not stored in shell history):
 
 ```bash
 npx wrangler secret put SUPABASE_URL
 npx wrangler secret put SUPABASE_KEY
 ```
 
-4. **Deploy to production.** First deploy creates the `velo-window` Worker and (if not already done) prompts to register a free `*.workers.dev` subdomain:
+1. **Deploy to production.** First deploy creates the `velo-window` Worker and (if not already done) prompts to register a free `*.workers.dev` subdomain:
 
 ```bash
 npx wrangler deploy
 ```
 
-5. **Verify it's live:**
+1. **Verify it's live:**
 
 ```bash
 npx wrangler deployments list
@@ -77,7 +77,7 @@ npx wrangler deployments list
 
 Then open the printed `https://velo-window.<subdomain>.workers.dev` URL. Expect: homepage renders; `/dashboard` redirects to `/auth/signin`; signup/signin now work against Supabase. (After signup, confirm the email per Supabase's flow / `/auth/confirm-email`.)
 
-6. **Optional smoke-tail** to watch live runtime logs while clicking through:
+1. **Optional smoke-tail** to watch live runtime logs while clicking through:
 
 ```bash
 npx wrangler tail
@@ -90,8 +90,8 @@ Cloudflare's native Git integration ("Workers Builds") deploys on every push wit
 1. **Human step (dashboard):** Workers & Pages -> select the `velo-window` Worker -> Settings -> Builds -> Connect.
 2. Authorize the Cloudflare GitHub app for `P4tR0L/velo-window`, choose the repo, and set the production branch to `main`.
 3. Build settings:
-   - Build command: `npm run build`
-   - Deploy command: `npx wrangler deploy` (default; uses the `wrangler` version pinned in `package.json`)
+  - Build command: `npm run build`
+  - Deploy command: `npx wrangler deploy` (default; uses the `wrangler` version pinned in `package.json`)
 4. Add build-time variables in the same Builds settings: `SUPABASE_URL`, `SUPABASE_KEY` (these are consumed by `npm run build`; the runtime Worker reads the secrets set in Part A step 3, which Workers Builds preserves across deploys).
 5. **Verify:** push a commit to `main` -> Cloudflare builds and promotes a new Active Deployment automatically; confirm via `npx wrangler deployments list` / the `workers.dev` URL. Non-`main` branches get preview versions (`wrangler versions upload`) without touching production.
 
@@ -104,3 +104,4 @@ Cloudflare's native Git integration ("Workers Builds") deploys on every push wit
 - Secrets are null-guarded, so a missing value degrades gracefully (auth off) rather than crashing the app.
 - `.dev.vars` and `dist/` are already gitignored — credentials won't be committed.
 - Rollback if needed: `npx wrangler rollback` (reverts code only, not Supabase).
+
