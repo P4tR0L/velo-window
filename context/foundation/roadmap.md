@@ -42,7 +42,7 @@ Recreational cyclists lose the urge to ride while manually weighing wind, temper
 | ID   | Change ID              | Outcome (user can …)                                                                    | Prerequisites | PRD refs                                                       | Status   |
 | ---- | ---------------------- | --------------------------------------------------------------------------------------- | ------------- | -------------------------------------------------------------- | -------- |
 | F-01 | automated-checks       | (foundation) every push to `main` runs lint, build and automated tests                  | —             | Guardrails                                                     | ready    |
-| S-01 | ride-window-search     | enter ride criteria and see the matching weather windows, or a clear reason none match  | F-01          | US-01, FR-001, FR-002, NFR: freshness, NFR: mobile, Guardrails | blocked  |
+| S-01 | ride-window-search     | enter ride criteria and see the matching weather windows, or a clear reason none match  | F-01          | US-01, FR-001, FR-002, NFR: freshness, NFR: mobile, NFR: location privacy, Guardrails | proposed |
 | S-02 | ai-ride-recommendation | get an AI route recommendation with riding-style tips for each matched window           | S-01          | US-01, FR-003, NFR: response time, Guardrails                  | proposed |
 | S-03 | route-path-from-start  | see a suggested route path from their starting location as part of the recommendation   | S-02          | US-01, FR-001, FR-003, NFR: location privacy                   | blocked  |
 | S-04 | ride-log-save-browse   | save a chosen window with its recommendation and criteria, and browse their ride log    | S-02          | FR-004, FR-005, NFR: location privacy                          | proposed |
@@ -89,7 +89,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Risk:** Sequenced first because the safety rules are where a silent mistake becomes a "safety failure" (PRD Guardrails), and agent-built slices need an automatic pass/fail signal; kept minimal — a test runner hooked into the existing CI checks, while the real tests come with the slices that own the rules.
 - **Status:** ready
 
-Deliberately not foundations: auth and deploy already exist (see Baseline), and the remaining pieces are built by the first slice that needs them, so each is shaped by a working feature instead of guessed up front — the app's own layout and first product endpoint come with S-01, app logging and the weather/AI credentials with the first slice that calls those services (S-01, S-02), and the first data tables with S-04 (or S-01, if the weather search ends up using a saved home area).
+Deliberately not foundations: auth and deploy already exist (see Baseline), and the remaining pieces are built by the first slice that needs them, so each is shaped by a working feature instead of guessed up front — the app's own layout and first product endpoint come with S-01, app logging and the weather/AI credentials with the first slice that calls those services (S-01, S-02), and the first data tables with S-04.
 
 ## Slices
 
@@ -97,15 +97,15 @@ Deliberately not foundations: auth and deploy already exist (see Baseline), and 
 
 - **Outcome:** User can enter ride criteria (day of week, time window, minimum temperature, maximum wind, optional starting location) and see the matching weather windows — or a clear reason why none match.
 - **Change ID:** ride-window-search
-- **PRD refs:** US-01, FR-001, FR-002, NFR: freshness, NFR: mobile, Guardrails
+- **PRD refs:** US-01, FR-001, FR-002, NFR: freshness, NFR: mobile, NFR: location privacy, Guardrails
 - **Prerequisites:** F-01
 - **Parallel with:** S-06
 - **Blockers:** —
 - **Unknowns:**
-  - Which place does the weather search use when the user gives no starting location — a home area saved once, the device's current location, or should location become required? A saved home area would make this the first slice that stores user data. — Owner: user. Block: yes.
+  - Resolved 2026-11-17: when the user gives no starting location, the weather search uses the device's current location, requested at search time and never stored; if permission is denied, the user types a place instead. — Owner: user. Block: no.
   - What counts as dangerous weather regardless of the user's own limits — thunderstorms, heat above what temperature, gusts above what speed? Planning can propose defaults for you to confirm. — Owner: user. Block: no.
 - **Risk:** First slice because every other slice consumes its windows; it holds the core matching rule and the first outside data source, so an unavailable or stale forecast must produce a clear error rather than a confident wrong answer, and windows with dangerous conditions must never be offered.
-- **Status:** blocked
+- **Status:** proposed
 
 ### S-02: AI ride recommendation
 
@@ -176,7 +176,7 @@ Deliberately not foundations: auth and deploy already exist (see Baseline), and 
 | Roadmap ID | Change ID              | Suggested issue title                                  | Ready for `/10x-plan` | Notes                                                                                          |
 | ---------- | ---------------------- | ------------------------------------------------------ | --------------------- | ---------------------------------------------------------------------------------------------- |
 | F-01       | automated-checks       | Run lint, build and tests on every push to main        | yes                   | Run `/10x-plan automated-checks`                                                               |
-| S-01       | ride-window-search     | Search matching weather windows from ride criteria     | no                    | Blocked: decide which place the weather search uses when no location is given; waits on F-01 |
+| S-01       | ride-window-search     | Search matching weather windows from ride criteria     | no                    | Waits on F-01; weather location decided (device location, typed fallback)                     |
 | S-02       | ai-ride-recommendation | AI route recommendation + riding-style tips per window | no                    | North star; waits on S-01                                                                      |
 | S-03       | route-path-from-start  | Suggested route path from a starting location          | no                    | Blocked: decide what a route path looks like; waits on S-02                                    |
 | S-04       | ride-log-save-browse   | Save a planned ride and browse the ride log            | no                    | Waits on S-02                                                                                  |
