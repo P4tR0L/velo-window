@@ -355,20 +355,20 @@ None. No database tables, no migrations, no new secrets (Open-Meteo is keyless).
 
 #### Automated
 
-- [x] 3.1 `npm run check:windows` still passes
-- [x] 3.2 `npm run lint` passes
-- [x] 3.3 `npm run build` passes
-- [x] 3.4 An unauthenticated `POST /api/ride-windows/search` returns 401 against `npm run dev`
+- [x] 3.1 `npm run check:windows` still passes — bb17883
+- [x] 3.2 `npm run lint` passes — bb17883
+- [x] 3.3 `npm run build` passes — bb17883
+- [x] 3.4 An unauthenticated `POST /api/ride-windows/search` returns 401 against `npm run dev` — bb17883
 
 #### Manual
 
-- [x] 3.5 A typed-place search ("Krakow") shows windows or a no-match reason, the resolved place name and a forecast-fetched time
-- [x] 3.6 An empty-place search asks for device location and shows results labelled "Your current location" when allowed
-- [x] 3.7 Denying location permission shows a prompt to type a place and sends no search request
-- [x] 3.8 A shown window's temperature and wind match the same hours on open-meteo.com for that place
-- [x] 3.9 Strict limits (wind 10, min temperature 20 in a cool week) show a no-match message with counts, for example "Wind exceeds 10 km/h in all N slots on Thursday"
-- [x] 3.10 An unknown place ("zzzzqqq") shows a clear place-not-found message
-- [x] 3.11 With the provider base URL temporarily broken, the UI shows a weather-unavailable error and no windows (revert afterwards)
-- [x] 3.12 The page is usable at 375 px width with no horizontal scroll, and results appear within 10 seconds
-- [x] 3.13 Visiting `/dashboard` signed out redirects to the sign-in page
-- [x] 3.14 No coordinates or place names appear in browser storage after a search
+- [x] 3.5 A typed-place search ("Krakow") shows windows or a no-match reason, the resolved place name and a forecast-fetched time — bb17883
+- [x] 3.6 An empty-place search asks for device location and shows results labelled "Your current location" when allowed — bb17883
+- [x] 3.7 Denying location permission shows a prompt to type a place and sends no search request — bb17883
+- [x] 3.8 A shown window's temperature and wind match the same hours on open-meteo.com for that place — bb17883
+- [x] 3.9 Strict limits (wind 10, min temperature 20 in a cool week) show a no-match message with counts, for example "Wind exceeds 10 km/h in all N slots on Thursday" — bb17883
+- [x] 3.10 An unknown place ("zzzzqqq") shows a clear place-not-found message — bb17883
+- [x] 3.11 With the provider base URL temporarily broken, the UI shows a weather-unavailable error and no windows (revert afterwards) — bb17883
+- [x] 3.12 The page is usable at 375 px width with no horizontal scroll, and results appear within 10 seconds — bb17883
+- [x] 3.13 Visiting `/dashboard` signed out redirects to the sign-in page — bb17883
+- [x] 3.14 No coordinates or place names appear in browser storage after a search — bb17883
