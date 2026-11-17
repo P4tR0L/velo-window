@@ -96,6 +96,9 @@ export interface RideWindowSearchResponse {
 
 export type ApiErrorCode = "UNAUTHENTICATED" | "INVALID_REQUEST" | "PLACE_NOT_FOUND" | "WEATHER_UNAVAILABLE";
 
+/** Error codes the search UI can show: the API codes plus the client-only `LOCATION_DENIED`. */
+export type SearchErrorCode = ApiErrorCode | "LOCATION_DENIED";
+
 export interface ApiErrorBody {
   error: { code: ApiErrorCode; message: string };
 }

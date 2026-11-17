@@ -341,34 +341,34 @@ None. No database tables, no migrations, no new secrets (Open-Meteo is keyless).
 
 #### Automated
 
-- [x] 2.1 `npm run check:windows` still passes
-- [x] 2.2 `npm run lint` passes
-- [x] 2.3 `npm run build` passes
+- [x] 2.1 `npm run check:windows` still passes — 16ec39d
+- [x] 2.2 `npm run lint` passes — 16ec39d
+- [x] 2.3 `npm run build` passes — 16ec39d
 
 #### Manual
 
-- [x] 2.4 A one-off Node call to `geocodePlace("Krakow")` returns Polish coordinates with timezone Europe/Warsaw
-- [x] 2.5 A one-off Node call to `fetchHourlySamples` for that place returns consecutive local-hour samples from today through today + 7 with no nulls in the required fields
-- [x] 2.6 Pointing the adapter at an unreachable host yields a `WEATHER_UNAVAILABLE` error within 8 seconds
+- [x] 2.4 A one-off Node call to `geocodePlace("Krakow")` returns Polish coordinates with timezone Europe/Warsaw — 16ec39d
+- [x] 2.5 A one-off Node call to `fetchHourlySamples` for that place returns consecutive local-hour samples from today through today + 7 with no nulls in the required fields — 16ec39d
+- [x] 2.6 Pointing the adapter at an unreachable host yields a `WEATHER_UNAVAILABLE` error within 8 seconds — 16ec39d
 
 ### Phase 3: API route and search UI
 
 #### Automated
 
-- [ ] 3.1 `npm run check:windows` still passes
-- [ ] 3.2 `npm run lint` passes
-- [ ] 3.3 `npm run build` passes
-- [ ] 3.4 An unauthenticated `POST /api/ride-windows/search` returns 401 against `npm run dev`
+- [x] 3.1 `npm run check:windows` still passes
+- [x] 3.2 `npm run lint` passes
+- [x] 3.3 `npm run build` passes
+- [x] 3.4 An unauthenticated `POST /api/ride-windows/search` returns 401 against `npm run dev`
 
 #### Manual
 
-- [ ] 3.5 A typed-place search ("Krakow") shows windows or a no-match reason, the resolved place name and a forecast-fetched time
-- [ ] 3.6 An empty-place search asks for device location and shows results labelled "Your current location" when allowed
-- [ ] 3.7 Denying location permission shows a prompt to type a place and sends no search request
-- [ ] 3.8 A shown window's temperature and wind match the same hours on open-meteo.com for that place
-- [ ] 3.9 Strict limits (wind 10, min temperature 20 in a cool week) show a no-match message with counts, for example "Wind exceeds 10 km/h in all N slots on Thursday"
-- [ ] 3.10 An unknown place ("zzzzqqq") shows a clear place-not-found message
-- [ ] 3.11 With the provider base URL temporarily broken, the UI shows a weather-unavailable error and no windows (revert afterwards)
-- [ ] 3.12 The page is usable at 375 px width with no horizontal scroll, and results appear within 10 seconds
-- [ ] 3.13 Visiting `/dashboard` signed out redirects to the sign-in page
-- [ ] 3.14 No coordinates or place names appear in browser storage after a search
+- [x] 3.5 A typed-place search ("Krakow") shows windows or a no-match reason, the resolved place name and a forecast-fetched time
+- [x] 3.6 An empty-place search asks for device location and shows results labelled "Your current location" when allowed
+- [x] 3.7 Denying location permission shows a prompt to type a place and sends no search request
+- [x] 3.8 A shown window's temperature and wind match the same hours on open-meteo.com for that place
+- [x] 3.9 Strict limits (wind 10, min temperature 20 in a cool week) show a no-match message with counts, for example "Wind exceeds 10 km/h in all N slots on Thursday"
+- [x] 3.10 An unknown place ("zzzzqqq") shows a clear place-not-found message
+- [x] 3.11 With the provider base URL temporarily broken, the UI shows a weather-unavailable error and no windows (revert afterwards)
+- [x] 3.12 The page is usable at 375 px width with no horizontal scroll, and results appear within 10 seconds
+- [x] 3.13 Visiting `/dashboard` signed out redirects to the sign-in page
+- [x] 3.14 No coordinates or place names appear in browser storage after a search
