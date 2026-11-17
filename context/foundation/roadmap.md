@@ -24,7 +24,7 @@ milestone_status: open
 
 - **Intent:** A signed-in cyclist can turn their personal limits into safe, matching ride windows, get an AI route recommendation for each, and keep a log of the rides they chose — the full scope of PRD v1.
 - **Source materials:** `context/foundation/prd.md` (v1)
-- **Done when:** every F-NN and S-NN below is `done`.
+- **Done when:** every S-NN below is `done`.
 - **Scope anchors:** FR-001 – FR-008, US-01.
 
 ## Vision recap
@@ -41,8 +41,7 @@ Recreational cyclists lose the urge to ride while manually weighing wind, temper
 
 | ID   | Change ID              | Outcome (user can …)                                                                    | Prerequisites | PRD refs                                                       | Status   |
 | ---- | ---------------------- | --------------------------------------------------------------------------------------- | ------------- | -------------------------------------------------------------- | -------- |
-| F-01 | automated-checks       | (foundation) every push to `main` runs lint, build and automated tests                  | —             | Guardrails                                                     | ready    |
-| S-01 | ride-window-search     | enter ride criteria and see the matching weather windows, or a clear reason none match  | F-01          | US-01, FR-001, FR-002, NFR: freshness, NFR: mobile, NFR: location privacy, Guardrails | proposed |
+| S-01 | ride-window-search     | enter ride criteria and see the matching weather windows, or a clear reason none match  | —             | US-01, FR-001, FR-002, NFR: freshness, NFR: mobile, NFR: location privacy, Guardrails | ready    |
 | S-02 | ai-ride-recommendation | get an AI route recommendation with riding-style tips for each matched window           | S-01          | US-01, FR-003, NFR: response time, Guardrails                  | proposed |
 | S-03 | route-path-from-start  | see a suggested route path from their starting location as part of the recommendation   | S-02          | US-01, FR-001, FR-003, NFR: location privacy                   | blocked  |
 | S-04 | ride-log-save-browse   | save a chosen window with its recommendation and criteria, and browse their ride log    | S-02          | FR-004, FR-005, NFR: location privacy                          | proposed |
@@ -57,14 +56,14 @@ Navigation aid — groups items that share a Prerequisites chain. Canonical orde
 
 | Stream | Theme                                  | Chain                             | Note                                                                                                                             |
 | ------ | -------------------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| A      | Find a window and get a recommendation | `F-01` → `S-01` → `S-02` → `S-03` | The required chain to the north star (`S-02`), starting from automated checks; `S-03` extends it once its question is answered. |
+| A      | Find a window and get a recommendation | `S-01` → `S-02` → `S-03`          | The required chain to the north star (`S-02`); `S-03` extends it once its question is answered.                                  |
 | B      | Ride log                               | `S-04` → `S-05`                   | Joins Stream A at `S-02`; can run alongside `S-03`.                                                                              |
 | C      | Sign-in options                        | `S-06`                            | Standalone; can run at any point once its scope question is answered.                                                           |
 
 ## Baseline
 
 What's already in place in the codebase as of `2026-11-17` (auto-researched + user-confirmed).
-Foundations below assume these are present and do NOT re-scaffold them.
+This milestone adds no foundations on top of it.
 
 - **Frontend:** partial — Astro + React islands + Tailwind + shadcn/ui wired (`astro.config.mjs`, `components.json`); only starter pages (welcome, dashboard placeholder, auth pages). No ride or weather UI.
 - **Backend / API:** partial — server-rendered Astro on Cloudflare Workers (`astro.config.mjs`); only the three auth endpoints (`src/pages/api/auth/`). No weather, AI, or window-matching logic; no input-validation library installed.
@@ -72,24 +71,11 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Auth:** present — Supabase email+password sign-up / sign-in / sign-out (`src/pages/api/auth/`, `src/pages/auth/`); middleware protects `/dashboard` (`src/middleware.ts`). No third-party sign-in (only a disabled Apple stub in `supabase/config.toml`).
 - **Deploy / infra:** present — Cloudflare Workers (`wrangler.jsonc`); manual deploy and auto-deploy on push to `main` verified (`context/deployment/deploy-plan.md`). CI (`.github/workflows/ci.yml`) runs lint + build on `main` (trigger corrected from a non-existent `master` branch on 2026-11-17). No secrets declared yet for a weather source or an AI service.
 - **Observability:** partial — Cloudflare platform logs enabled (`wrangler.jsonc`); no app logger, no error tracking.
-- **Testing:** absent — no test runner installed (addressed by F-01). Line endings are pinned to LF (`.gitattributes`), so local lint on Windows matches CI.
+- **Testing:** absent — no test runner installed. CI (`.github/workflows/ci.yml`) already runs lint + build on `main`. An automated test suite is parked (see Parked); each slice is checked by those existing CI steps plus the checks written into its plan. Line endings are pinned to LF (`.gitattributes`), so local lint on Windows matches CI.
 
 ## Foundations
 
-### F-01: Automated checks on every push
-
-- **Outcome:** (foundation) every push to `main` runs lint, build and automated tests, with a test runner in place for the first slice's rules.
-- **Change ID:** automated-checks
-- **PRD refs:** Guardrails
-- **Unlocks:** S-01, S-02 — a verification path for the safety rules (dangerous windows are never offered; AI advice stays bounded by the window's forecast).
-- **Prerequisites:** —
-- **Parallel with:** S-06
-- **Blockers:** —
-- **Unknowns:** —
-- **Risk:** Sequenced first because the safety rules are where a silent mistake becomes a "safety failure" (PRD Guardrails), and agent-built slices need an automatic pass/fail signal; kept minimal — a test runner hooked into the existing CI checks, while the real tests come with the slices that own the rules.
-- **Status:** ready
-
-Deliberately not foundations: auth and deploy already exist (see Baseline), and the remaining pieces are built by the first slice that needs them, so each is shaped by a working feature instead of guessed up front — the app's own layout and first product endpoint come with S-01, app logging and the weather/AI credentials with the first slice that calls those services (S-01, S-02), and the first data tables with S-04.
+None in this milestone. Auth and deploy already exist (see Baseline). Everything else arrives with the first slice that needs it, so it is shaped by a working feature instead of guessed up front — the app's own layout and first product endpoint come with S-01, app logging and the weather/AI credentials with the first slice that calls those services (S-01, S-02), and the first data tables with S-04. The safety rules (dangerous windows are never offered; AI advice stays bounded by the window's forecast) are part of S-01 and S-02, checked there, not by a separate test-runner foundation.
 
 ## Slices
 
@@ -98,14 +84,14 @@ Deliberately not foundations: auth and deploy already exist (see Baseline), and 
 - **Outcome:** User can enter ride criteria (day of week, time window, minimum temperature, maximum wind, optional starting location) and see the matching weather windows — or a clear reason why none match.
 - **Change ID:** ride-window-search
 - **PRD refs:** US-01, FR-001, FR-002, NFR: freshness, NFR: mobile, NFR: location privacy, Guardrails
-- **Prerequisites:** F-01
+- **Prerequisites:** —
 - **Parallel with:** S-06
 - **Blockers:** —
 - **Unknowns:**
   - Resolved 2026-11-17: when the user gives no starting location, the weather search uses the device's current location, requested at search time and never stored; if permission is denied, the user types a place instead. — Owner: user. Block: no.
   - What counts as dangerous weather regardless of the user's own limits — thunderstorms, heat above what temperature, gusts above what speed? Planning can propose defaults for you to confirm. — Owner: user. Block: no.
 - **Risk:** First slice because every other slice consumes its windows; it holds the core matching rule and the first outside data source, so an unavailable or stale forecast must produce a clear error rather than a confident wrong answer, and windows with dangerous conditions must never be offered.
-- **Status:** proposed
+- **Status:** ready
 
 ### S-02: AI ride recommendation
 
@@ -164,7 +150,7 @@ Deliberately not foundations: auth and deploy already exist (see Baseline), and 
 - **Change ID:** third-party-sign-in
 - **PRD refs:** FR-008
 - **Prerequisites:** —
-- **Parallel with:** F-01, S-01, S-02, S-03, S-04, S-05
+- **Parallel with:** S-01, S-02, S-03, S-04, S-05
 - **Blockers:** —
 - **Unknowns:**
   - Is third-party sign-in needed in this milestone, or does the existing email+password sign-in already satisfy FR-008 ("email+password or third-party identity provider")? If it isn't needed, this slice moves to Parked. — Owner: user. Block: yes.
@@ -175,8 +161,7 @@ Deliberately not foundations: auth and deploy already exist (see Baseline), and 
 
 | Roadmap ID | Change ID              | Suggested issue title                                  | Ready for `/10x-plan` | Notes                                                                                          |
 | ---------- | ---------------------- | ------------------------------------------------------ | --------------------- | ---------------------------------------------------------------------------------------------- |
-| F-01       | automated-checks       | Run lint, build and tests on every push to main        | yes                   | Run `/10x-plan automated-checks`                                                               |
-| S-01       | ride-window-search     | Search matching weather windows from ride criteria     | no                    | Waits on F-01; weather location decided (device location, typed fallback)                     |
+| S-01       | ride-window-search     | Search matching weather windows from ride criteria     | yes                   | Run `/10x-plan ride-window-search`; weather location decided (device location, typed fallback) |
 | S-02       | ai-ride-recommendation | AI route recommendation + riding-style tips per window | no                    | North star; waits on S-01                                                                      |
 | S-03       | route-path-from-start  | Suggested route path from a starting location          | no                    | Blocked: decide what a route path looks like; waits on S-02                                    |
 | S-04       | ride-log-save-browse   | Save a planned ride and browse the ride log            | no                    | Waits on S-02                                                                                  |
@@ -199,6 +184,7 @@ The PRD lists no open questions; this one surfaced while sequencing.
 - **Offline-first guarantee** — Why parked: PRD §Non-Goals.
 - **Multi-sport support** — Why parked: PRD §Non-Goals (cycling only).
 - **Error tracking and alerting beyond the platform's built-in logs** — Why parked: `main_goal: speed`; platform logs plus the minimal app logging added with the first slice that calls outside services are enough to debug this milestone.
+- **Automated test runner** — Why parked: CI already runs lint and build on every push to `main`. A test suite is not required to ship this milestone; it returns when the project is ready to add automated tests. The safety rules stay in S-01 and S-02.
 
 ## Milestone History
 
