@@ -32,6 +32,9 @@ npm-debug.log*
 .cursor/prompts/
 .cursor/.10x-cli-manifest.json
 
+# Course lesson notes (local copies, not for the repo)
+notes/lessons/
+
 # from starter template
 .astro/
 yarn-debug.log*
