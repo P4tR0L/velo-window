@@ -72,7 +72,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Auth:** present — Supabase email+password sign-up / sign-in / sign-out (`src/pages/api/auth/`, `src/pages/auth/`); middleware protects `/dashboard` (`src/middleware.ts`). No third-party sign-in (only a disabled Apple stub in `supabase/config.toml`).
 - **Deploy / infra:** present — Cloudflare Workers (`wrangler.jsonc`); manual deploy and auto-deploy on push to `main` verified (`context/deployment/deploy-plan.md`). CI (`.github/workflows/ci.yml`) runs lint + build on `main` (trigger corrected from a non-existent `master` branch on 2026-11-17). No secrets declared yet for a weather source or an AI service.
 - **Observability:** partial — Cloudflare platform logs enabled (`wrangler.jsonc`); no app logger, no error tracking.
-- **Testing:** absent — no test runner installed (addressed by F-01). Local lint on Windows checkouts reports only line-ending errors (CRLF working copy vs. the formatter's LF rule); CI on Linux is unaffected.
+- **Testing:** absent — no test runner installed (addressed by F-01). Line endings are pinned to LF (`.gitattributes`), so local lint on Windows matches CI.
 
 ## Foundations
 
