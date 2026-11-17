@@ -3,7 +3,7 @@ project: Velo Window
 version: 1
 status: draft
 created: 2026-11-17
-updated: 2026-11-17
+updated: 2026-11-18
 prd_version: 1
 main_goal: speed
 top_blocker: decisions
@@ -41,7 +41,7 @@ Recreational cyclists lose the urge to ride while manually weighing wind, temper
 
 | ID   | Change ID              | Outcome (user can …)                                                                    | Prerequisites | PRD refs                                                       | Status   |
 | ---- | ---------------------- | --------------------------------------------------------------------------------------- | ------------- | -------------------------------------------------------------- | -------- |
-| S-01 | ride-window-search     | enter ride criteria and see the matching weather windows, or a clear reason none match  | —             | US-01, FR-001, FR-002, NFR: freshness, NFR: mobile, NFR: location privacy, Guardrails | ready    |
+| S-01 | ride-window-search     | enter ride criteria and see the matching weather windows, or a clear reason none match  | —             | US-01, FR-001, FR-002, NFR: freshness, NFR: mobile, NFR: location privacy, Guardrails | in-progress |
 | S-02 | ai-ride-recommendation | get an AI route recommendation with riding-style tips for each matched window           | S-01          | US-01, FR-003, NFR: response time, Guardrails                  | proposed |
 | S-03 | route-path-from-start  | see a suggested route path from their starting location as part of the recommendation   | S-02          | US-01, FR-001, FR-003, NFR: location privacy                   | blocked  |
 | S-04 | ride-log-save-browse   | save a chosen window with its recommendation and criteria, and browse their ride log    | S-02          | FR-004, FR-005, NFR: location privacy                          | proposed |
@@ -91,7 +91,7 @@ None in this milestone. Auth and deploy already exist (see Baseline). Everything
   - Resolved 2026-11-17: when the user gives no starting location, the weather search uses the device's current location, requested at search time and never stored; if permission is denied, the user types a place instead. — Owner: user. Block: no.
   - What counts as dangerous weather regardless of the user's own limits — thunderstorms, heat above what temperature, gusts above what speed? Planning can propose defaults for you to confirm. — Owner: user. Block: no.
 - **Risk:** First slice because every other slice consumes its windows; it holds the core matching rule and the first outside data source, so an unavailable or stale forecast must produce a clear error rather than a confident wrong answer, and windows with dangerous conditions must never be offered.
-- **Status:** ready
+- **Status:** in-progress
 
 ### S-02: AI ride recommendation
 
