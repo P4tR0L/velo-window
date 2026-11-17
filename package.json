@@ -9,6 +9,7 @@
     "astro": "astro",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "check:windows": "node --experimental-strip-types scripts/check-window-matching.ts",
     "format": "prettier --write ."
   },
   "dependencies": {
