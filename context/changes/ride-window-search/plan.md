@@ -329,27 +329,27 @@ None. No database tables, no migrations, no new secrets (Open-Meteo is keyless).
 
 #### Automated
 
-- [x] 1.1 `npm run check:windows` passes with every agreed-rule case
-- [x] 1.2 `npm run lint` passes
-- [x] 1.3 `npm run build` passes
+- [x] 1.1 `npm run check:windows` passes with every agreed-rule case — 18d0aab
+- [x] 1.2 `npm run lint` passes — 18d0aab
+- [x] 1.3 `npm run build` passes — 18d0aab
 
 #### Manual
 
-- [x] 1.4 The case names printed by the check script cover every agreed rule (window runs, wind basis, danger limits, ordering, weekday and now, no-match reasons)
+- [x] 1.4 The case names printed by the check script cover every agreed rule (window runs, wind basis, danger limits, ordering, weekday and now, no-match reasons) — 18d0aab
 
 ### Phase 2: Weather service
 
 #### Automated
 
-- [ ] 2.1 `npm run check:windows` still passes
-- [ ] 2.2 `npm run lint` passes
-- [ ] 2.3 `npm run build` passes
+- [x] 2.1 `npm run check:windows` still passes
+- [x] 2.2 `npm run lint` passes
+- [x] 2.3 `npm run build` passes
 
 #### Manual
 
-- [ ] 2.4 A one-off Node call to `geocodePlace("Krakow")` returns Polish coordinates with timezone Europe/Warsaw
-- [ ] 2.5 A one-off Node call to `fetchHourlySamples` for that place returns consecutive local-hour samples from today through today + 7 with no nulls in the required fields
-- [ ] 2.6 Pointing the adapter at an unreachable host yields a `WEATHER_UNAVAILABLE` error within 8 seconds
+- [x] 2.4 A one-off Node call to `geocodePlace("Krakow")` returns Polish coordinates with timezone Europe/Warsaw
+- [x] 2.5 A one-off Node call to `fetchHourlySamples` for that place returns consecutive local-hour samples from today through today + 7 with no nulls in the required fields
+- [x] 2.6 Pointing the adapter at an unreachable host yields a `WEATHER_UNAVAILABLE` error within 8 seconds
 
 ### Phase 3: API route and search UI
 
