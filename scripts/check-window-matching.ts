@@ -28,6 +28,7 @@ function sample(date: string, hour: number, overrides: Partial<HourlySample> = {
     gustKmh: 20,
     weatherCode: 1,
     precipProbability: 0,
+    windDirectionDeg: 270,
     ...overrides,
   };
 }
@@ -140,6 +141,22 @@ const cases: Case[] = [
       assert.deepEqual(windowRanges(result), ["15-16"]);
       assert.equal(result.windows[0].slots[0].windKmh, 20);
       assert.equal(result.windows[0].slots[0].gustKmh, 45, "slot gust is the gust at T+1");
+    },
+  },
+  {
+    name: "wind direction: a slot carries the direction of its start sample, null stays null",
+    run: () => {
+      const samples = day(THURSDAY, 15, 17, {
+        15: { windDirectionDeg: 45 },
+        16: { windDirectionDeg: null },
+        17: { windDirectionDeg: 180 },
+      });
+      const result = search(samples, thursdayCriteria());
+      assert.deepEqual(windowRanges(result), ["15-17"]);
+      assert.deepEqual(
+        result.windows[0].slots.map((slot) => slot.windDirectionDeg),
+        [45, null],
+      );
     },
   },
   {

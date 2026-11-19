@@ -6,7 +6,8 @@ import { WeatherServiceError } from "./weather-service-error.ts";
 export const GEOCODING_BASE_URL = "https://geocoding-api.open-meteo.com";
 export const FORECAST_BASE_URL = "https://api.open-meteo.com";
 
-const HOURLY_VARIABLES = "temperature_2m,wind_speed_10m,wind_gusts_10m,weather_code,precipitation_probability";
+const HOURLY_VARIABLES =
+  "temperature_2m,wind_speed_10m,wind_gusts_10m,weather_code,precipitation_probability,wind_direction_10m";
 
 export interface AdapterOptions {
   /** Overrides the provider base URL; production call sites never set it. */
@@ -53,6 +54,7 @@ const forecastResponseSchema = z.object({
       wind_gusts_10m: nullableNumbers,
       weather_code: nullableNumbers,
       precipitation_probability: nullableNumbers,
+      wind_direction_10m: nullableNumbers,
     })
     .refine(
       (hourly) =>
@@ -62,6 +64,7 @@ const forecastResponseSchema = z.object({
           hourly.wind_gusts_10m,
           hourly.weather_code,
           hourly.precipitation_probability,
+          hourly.wind_direction_10m,
         ].every((series) => series.length === hourly.time.length),
       { message: "Hourly series have different lengths." },
     ),
@@ -130,7 +133,7 @@ export async function geocodePlace(
  * Hourly forecast for today and the next seven days, as samples in the location's local time.
  *
  * Samples missing temperature, wind, gust or weather code are dropped; precipitation
- * probability may stay null.
+ * probability and wind direction may stay null.
  */
 export async function fetchHourlySamples(
   latitude: number,
@@ -174,6 +177,7 @@ export async function fetchHourlySamples(
         gustKmh,
         weatherCode,
         precipProbability: hourly.precipitation_probability[index] ?? null,
+        windDirectionDeg: hourly.wind_direction_10m[index] ?? null,
       });
     });
   } catch {

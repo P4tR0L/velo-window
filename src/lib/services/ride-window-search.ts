@@ -60,7 +60,8 @@ export async function searchRideWindows(request: RideSearchRequest): Promise<Rid
     location: { label, timezone: forecast.timezone },
     fetchedAt: fetchedAt.toISOString(),
     targetDate: result.targetDate,
-    windows: result.windows,
+    windows: result.windows.map((window) => ({ ...window, recommendation: null })),
+    recommendationStatus: null,
     noMatchMessage:
       result.windows.length === 0 ? describeNoMatch(result.noMatchReasons, criteria, result.targetDate) : null,
   };

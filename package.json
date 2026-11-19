@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "check:windows": "node --experimental-strip-types scripts/check-window-matching.ts",
+    "check:recommendations": "node --experimental-strip-types scripts/check-recommendations.ts",
     "format": "prettier --write ."
   },
   "dependencies": {

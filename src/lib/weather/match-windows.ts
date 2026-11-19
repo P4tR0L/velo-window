@@ -133,6 +133,7 @@ export function findRideWindows(input: {
       windKmh: start.windKmh,
       gustKmh: end.gustKmh,
       precipProbability: start.precipProbability,
+      windDirectionDeg: start.windDirectionDeg,
     });
   }
   closeRun();

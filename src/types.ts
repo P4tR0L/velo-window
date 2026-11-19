@@ -32,6 +32,8 @@ export interface HourlySample {
   gustKmh: number;
   weatherCode: number;
   precipProbability: number | null;
+  /** Direction the wind comes from, degrees 0-360 (meteorological); `null` when the provider has none. */
+  windDirectionDeg: number | null;
 }
 
 /** Current local date and time of the searched place. */
@@ -54,6 +56,8 @@ export interface WindowSlot {
   /** Maximum gust over the slot's hour (the sample at the slot's end). */
   gustKmh: number;
   precipProbability: number | null;
+  /** Direction the wind comes from at the slot's start, degrees 0-360; `null` when unknown. */
+  windDirectionDeg: number | null;
 }
 
 /** An unbroken run of passing slots on one date. `endHour` is exclusive. */
@@ -83,13 +87,30 @@ export interface WindowSearchResult {
   noMatchReasons: NoMatchReason[];
 }
 
+/** AI advice for one ride window, grounded in that window's own forecast. */
+export interface WindowRecommendation {
+  summary: string;
+  routeAdvice: string;
+  styleTips: string[];
+}
+
+/** A ride window with its AI recommendation; `null` when none could be produced. */
+export interface RecommendedWindow extends RideWindow {
+  recommendation: WindowRecommendation | null;
+}
+
+/** Outcome of the recommendation step for a search that has windows. */
+export type RecommendationStatus = "ok" | "unavailable" | "invalid-output";
+
 /** Successful response of the search API. */
 export interface RideWindowSearchResponse {
   location: { label: string; timezone: string };
   /** ISO time of the forecast fetch. */
   fetchedAt: string;
   targetDate: string;
-  windows: RideWindow[];
+  windows: RecommendedWindow[];
+  /** `null` when there are no windows (no recommendation was attempted). */
+  recommendationStatus: RecommendationStatus | null;
   /** Human-readable reason; `null` when windows exist. */
   noMatchMessage: string | null;
 }
