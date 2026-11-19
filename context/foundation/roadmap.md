@@ -42,7 +42,7 @@ Recreational cyclists lose the urge to ride while manually weighing wind, temper
 | ID   | Change ID              | Outcome (user can …)                                                                    | Prerequisites | PRD refs                                                       | Status   |
 | ---- | ---------------------- | --------------------------------------------------------------------------------------- | ------------- | -------------------------------------------------------------- | -------- |
 | S-01 | ride-window-search     | enter ride criteria and see the matching weather windows, or a clear reason none match  | —             | US-01, FR-001, FR-002, NFR: freshness, NFR: mobile, NFR: location privacy, Guardrails | done |
-| S-02 | ai-ride-recommendation | get an AI route recommendation with riding-style tips for each matched window           | S-01          | US-01, FR-003, NFR: response time, Guardrails                  | in-progress |
+| S-02 | ai-ride-recommendation | get an AI route recommendation with riding-style tips for each matched window           | S-01          | US-01, FR-003, NFR: response time, Guardrails                  | done |
 | S-03 | route-path-from-start  | see a suggested route path from their starting location as part of the recommendation   | S-02          | US-01, FR-001, FR-003, NFR: location privacy                   | blocked  |
 | S-04 | ride-log-save-browse   | save a chosen window with its recommendation and criteria, and browse their ride log    | S-02          | FR-004, FR-005, NFR: location privacy                          | proposed |
 | S-05 | ride-log-edit-delete   | edit a saved ride's criteria or notes, and delete a saved ride                          | S-04          | FR-006, FR-007                                                 | proposed |
@@ -104,7 +104,7 @@ None in this milestone. Auth and deploy already exist (see Baseline). Everything
 - **Unknowns:**
   - If the AI service is slow or unavailable, should the matched windows still show (without a recommendation), or should the search report an error? — Owner: user. Block: no.
 - **Risk:** Proves the core hypothesis, so it follows S-01 directly; the AI call can push search + recommendation past the response-time target, and its advice must stay bounded by the window's actual weather — never encouraging a ride the window search excluded.
-- **Status:** in-progress
+- **Status:** done
 
 ### S-03: Route path from a starting location
 
@@ -195,3 +195,4 @@ Append-only; carried forward verbatim into each successor milestone. No closed m
 Empty. `/10x-archive` appends an entry here — and flips that item's `Status` to `done` — when a change whose `Change ID` matches a roadmap item is archived.
 
 - **S-01: User can enter ride criteria (day of week, time window, minimum temperature, maximum wind, optional starting location) and see the matching weather windows — or a clear reason why none match.** — Archived 2026-11-17 → `context/archive/2026-11-17-ride-window-search/`. Lesson: —.
+- **S-02: User can get an AI route recommendation with riding-style tips for each matched window, grounded in that window's conditions.** — Archived 2026-11-19 → `context/archive/2026-11-19-ai-ride-recommendation/`. Lesson: —.
