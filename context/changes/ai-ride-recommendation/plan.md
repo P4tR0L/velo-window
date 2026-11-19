@@ -341,16 +341,16 @@ None for the database: no tables, no migrations. New configuration: `OPENROUTER_
 
 #### Automated
 
-- [x] 3.1 `npm run check:windows` still passes
-- [x] 3.2 `npm run check:recommendations` still passes
-- [x] 3.3 `npm run lint` passes
-- [x] 3.4 `npm run build` passes
+- [x] 3.1 `npm run check:windows` still passes — da2d064
+- [x] 3.2 `npm run check:recommendations` still passes — da2d064
+- [x] 3.3 `npm run lint` passes — da2d064
+- [x] 3.4 `npm run build` passes — da2d064
 
 #### Manual
 
-- [x] 3.5 A typed-place search with windows shows a summary, route advice and 2–4 tips on every card, and the text refers to that window's conditions (wind from the stated direction, temperature, rain chance)
-- [x] 3.6 The advice never names a place, road or route and never suggests riding at hours outside the card's window
-- [x] 3.7 With the API key removed, each card shows the weather plus the unavailable note and no error banner
-- [x] 3.8 A no-match search shows only S-01's no-match message
-- [x] 3.9 The page is usable at 375 px width with no horizontal scroll, and results appear within 10 seconds
-- [x] 3.10 No coordinates, place names or recommendation text appear in browser storage after a search
+- [x] 3.5 A typed-place search with windows shows a summary, route advice and 2–4 tips on every card, and the text refers to that window's conditions (wind from the stated direction, temperature, rain chance) — da2d064
+- [x] 3.6 The advice never names a place, road or route and never suggests riding at hours outside the card's window — da2d064
+- [x] 3.7 With the API key removed, each card shows the weather plus the unavailable note and no error banner — da2d064
+- [x] 3.8 A no-match search shows only S-01's no-match message — da2d064
+- [x] 3.9 The page is usable at 375 px width with no horizontal scroll, and results appear within 10 seconds — da2d064
+- [x] 3.10 No coordinates, place names or recommendation text appear in browser storage after a search — da2d064
