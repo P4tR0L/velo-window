@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { OPENROUTER_API_KEY, OPENROUTER_MODEL } from "astro:env/server";
 import { rideSearchRequestSchema } from "@/lib/schemas/ride-search-request";
 import { searchRideWindows, WeatherServiceError } from "@/lib/services/ride-window-search";
 import type { ApiErrorBody, ApiErrorCode } from "@/types";
@@ -35,7 +36,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
   }
 
   try {
-    const result = await searchRideWindows(parsed.data);
+    const result = await searchRideWindows(parsed.data, {
+      recommendation: { apiKey: OPENROUTER_API_KEY, model: OPENROUTER_MODEL },
+    });
     return json(result, 200);
   } catch (error) {
     if (error instanceof WeatherServiceError) {

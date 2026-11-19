@@ -308,34 +308,34 @@ None for the database: no tables, no migrations. New configuration: `OPENROUTER_
 
 #### Automated
 
-- [x] 1.1 `npm run check:windows` passes (including the wind-direction slot case)
-- [x] 1.2 `npm run check:recommendations` passes with every agreed case
-- [x] 1.3 `npm run lint` passes
-- [x] 1.4 `npm run build` passes
+- [x] 1.1 `npm run check:windows` passes (including the wind-direction slot case) — 49486ed
+- [x] 1.2 `npm run check:recommendations` passes with every agreed case — 49486ed
+- [x] 1.3 `npm run lint` passes — 49486ed
+- [x] 1.4 `npm run build` passes — 49486ed
 
 #### Manual
 
-- [x] 1.5 The case names printed by `check:recommendations` cover compass points, no-location prompt, matched-windows-only prompt and every output rejection rule
-- [x] 1.6 The system prompt text reads as the guardrails in "Critical Implementation Details" (weather-bounded, no invented roads or places, no excluded hours)
+- [x] 1.5 The case names printed by `check:recommendations` cover compass points, no-location prompt, matched-windows-only prompt and every output rejection rule — 49486ed
+- [x] 1.6 The system prompt text reads as the guardrails in "Critical Implementation Details" (weather-bounded, no invented roads or places, no excluded hours) — 49486ed
 
 ### Phase 2: OpenRouter adapter and service wiring
 
 #### Automated
 
-- [ ] 2.1 `npm run check:windows` still passes
-- [ ] 2.2 `npm run check:recommendations` still passes
-- [ ] 2.3 `npm run lint` passes
-- [ ] 2.4 `npm run build` passes
-- [ ] 2.5 An unauthenticated `POST /api/ride-windows/search` still returns 401 against `npm run dev`
+- [x] 2.1 `npm run check:windows` still passes
+- [x] 2.2 `npm run check:recommendations` still passes
+- [x] 2.3 `npm run lint` passes
+- [x] 2.4 `npm run build` passes
+- [x] 2.5 An unauthenticated `POST /api/ride-windows/search` still returns 401 against `npm run dev`
 
 #### Manual
 
-- [ ] 2.6 With a valid `OPENROUTER_API_KEY` in `.dev.vars`, a typed-place search that has windows returns one recommendation per window and `recommendationStatus: "ok"` in the network response
-- [ ] 2.7 A search with no matching windows (strict limits) makes no OpenRouter request and returns `recommendationStatus: null` with the no-match message unchanged
-- [ ] 2.8 With the key removed, the same search returns the windows with `recommendation: null` and `recommendationStatus: "unavailable"`
-- [ ] 2.9 With `OPENROUTER_MODEL` set to a nonexistent slug, the response is `"unavailable"` with windows intact
-- [ ] 2.10 Search plus recommendation completes within 10 seconds across at least five consecutive searches
-- [ ] 2.11 The response and dev-server output contain no API key, prompt text or coordinates
+- [x] 2.6 With a valid `OPENROUTER_API_KEY` in `.dev.vars`, a typed-place search that has windows returns one recommendation per window and `recommendationStatus: "ok"` in the network response
+- [x] 2.7 A search with no matching windows (strict limits) makes no OpenRouter request and returns `recommendationStatus: null` with the no-match message unchanged
+- [x] 2.8 With the key removed, the same search returns the windows with `recommendation: null` and `recommendationStatus: "unavailable"`
+- [x] 2.9 With `OPENROUTER_MODEL` set to a nonexistent slug, the response is `"unavailable"` with windows intact
+- [x] 2.10 Search plus recommendation completes within 10 seconds across at least five consecutive searches
+- [x] 2.11 The response and dev-server output contain no API key, prompt text or coordinates
 
 ### Phase 3: Recommendation UI
 
