@@ -7,7 +7,7 @@ export default function RideSearch() {
 
   let busyLabel: string | null = null;
   if (state.status === "locating") busyLabel = "Getting your location…";
-  else if (state.status === "loading") busyLabel = "Searching…";
+  else if (state.status === "loading") busyLabel = "Finding windows and recommendations…";
 
   return (
     <div className="space-y-6">

@@ -322,35 +322,35 @@ None for the database: no tables, no migrations. New configuration: `OPENROUTER_
 
 #### Automated
 
-- [x] 2.1 `npm run check:windows` still passes
-- [x] 2.2 `npm run check:recommendations` still passes
-- [x] 2.3 `npm run lint` passes
-- [x] 2.4 `npm run build` passes
-- [x] 2.5 An unauthenticated `POST /api/ride-windows/search` still returns 401 against `npm run dev`
+- [x] 2.1 `npm run check:windows` still passes — eff23a0
+- [x] 2.2 `npm run check:recommendations` still passes — eff23a0
+- [x] 2.3 `npm run lint` passes — eff23a0
+- [x] 2.4 `npm run build` passes — eff23a0
+- [x] 2.5 An unauthenticated `POST /api/ride-windows/search` still returns 401 against `npm run dev` — eff23a0
 
 #### Manual
 
-- [x] 2.6 With a valid `OPENROUTER_API_KEY` in `.dev.vars`, a typed-place search that has windows returns one recommendation per window and `recommendationStatus: "ok"` in the network response
-- [x] 2.7 A search with no matching windows (strict limits) makes no OpenRouter request and returns `recommendationStatus: null` with the no-match message unchanged
-- [x] 2.8 With the key removed, the same search returns the windows with `recommendation: null` and `recommendationStatus: "unavailable"`
-- [x] 2.9 With `OPENROUTER_MODEL` set to a nonexistent slug, the response is `"unavailable"` with windows intact
-- [x] 2.10 Search plus recommendation completes within 10 seconds across at least five consecutive searches
-- [x] 2.11 The response and dev-server output contain no API key, prompt text or coordinates
+- [x] 2.6 With a valid `OPENROUTER_API_KEY` in `.dev.vars`, a typed-place search that has windows returns one recommendation per window and `recommendationStatus: "ok"` in the network response — eff23a0
+- [x] 2.7 A search with no matching windows (strict limits) makes no OpenRouter request and returns `recommendationStatus: null` with the no-match message unchanged — eff23a0
+- [x] 2.8 With the key removed, the same search returns the windows with `recommendation: null` and `recommendationStatus: "unavailable"` — eff23a0
+- [x] 2.9 With `OPENROUTER_MODEL` set to a nonexistent slug, the response is `"unavailable"` with windows intact — eff23a0
+- [x] 2.10 Search plus recommendation completes within 10 seconds across at least five consecutive searches — eff23a0
+- [x] 2.11 The response and dev-server output contain no API key, prompt text or coordinates — eff23a0
 
 ### Phase 3: Recommendation UI
 
 #### Automated
 
-- [ ] 3.1 `npm run check:windows` still passes
-- [ ] 3.2 `npm run check:recommendations` still passes
-- [ ] 3.3 `npm run lint` passes
-- [ ] 3.4 `npm run build` passes
+- [x] 3.1 `npm run check:windows` still passes
+- [x] 3.2 `npm run check:recommendations` still passes
+- [x] 3.3 `npm run lint` passes
+- [x] 3.4 `npm run build` passes
 
 #### Manual
 
-- [ ] 3.5 A typed-place search with windows shows a summary, route advice and 2–4 tips on every card, and the text refers to that window's conditions (wind from the stated direction, temperature, rain chance)
-- [ ] 3.6 The advice never names a place, road or route and never suggests riding at hours outside the card's window
-- [ ] 3.7 With the API key removed, each card shows the weather plus the unavailable note and no error banner
-- [ ] 3.8 A no-match search shows only S-01's no-match message
-- [ ] 3.9 The page is usable at 375 px width with no horizontal scroll, and results appear within 10 seconds
-- [ ] 3.10 No coordinates, place names or recommendation text appear in browser storage after a search
+- [x] 3.5 A typed-place search with windows shows a summary, route advice and 2–4 tips on every card, and the text refers to that window's conditions (wind from the stated direction, temperature, rain chance)
+- [x] 3.6 The advice never names a place, road or route and never suggests riding at hours outside the card's window
+- [x] 3.7 With the API key removed, each card shows the weather plus the unavailable note and no error banner
+- [x] 3.8 A no-match search shows only S-01's no-match message
+- [x] 3.9 The page is usable at 375 px width with no horizontal scroll, and results appear within 10 seconds
+- [x] 3.10 No coordinates, place names or recommendation text appear in browser storage after a search

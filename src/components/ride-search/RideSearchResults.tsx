@@ -1,9 +1,48 @@
 import type { RideSearchState } from "@/components/hooks/useRideWindowSearch";
 import { formatFetchedAt, formatHour, formatTargetDate } from "@/components/ride-search/format";
 import { cn } from "@/lib/utils";
-import type { RideWindow, RideWindowSearchResponse } from "@/types";
+import type { RecommendationStatus, RecommendedWindow, RideWindowSearchResponse } from "@/types";
 
-function WindowCard({ window }: { window: RideWindow }) {
+const RECOMMENDATION_NOTES: Record<Exclude<RecommendationStatus, "ok">, string> = {
+  unavailable: "Recommendation unavailable right now. The weather above is still current.",
+  "invalid-output": "We couldn't use the AI answer for this window. The weather above is still current.",
+};
+
+function Recommendation({
+  recommendation,
+  status,
+}: {
+  recommendation: RecommendedWindow["recommendation"];
+  status: RecommendationStatus | null;
+}) {
+  if (recommendation) {
+    return (
+      <div className="mt-3 space-y-2 border-t border-white/10 pt-3 text-sm break-words text-blue-100/90">
+        <p className="font-medium text-white">{recommendation.summary}</p>
+        <p>
+          <span className="font-medium text-white">Route:</span> {recommendation.routeAdvice}
+        </p>
+        <ul className="list-disc space-y-1 pl-5">
+          {recommendation.styleTips.map((tip, index) => (
+            <li key={`${index}-${tip}`}>{tip}</li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  if (status === "unavailable" || status === "invalid-output") {
+    return (
+      <p className="mt-3 border-t border-white/10 pt-3 text-xs break-words text-blue-100/60">
+        {RECOMMENDATION_NOTES[status]}
+      </p>
+    );
+  }
+
+  return null;
+}
+
+function WindowCard({ window, status }: { window: RecommendedWindow; status: RecommendationStatus | null }) {
   return (
     <li className="rounded-xl border border-white/10 bg-white/5 p-3">
       <h3 className="text-base font-semibold text-white">
@@ -44,6 +83,7 @@ function WindowCard({ window }: { window: RideWindow }) {
           ))}
         </tbody>
       </table>
+      <Recommendation recommendation={window.recommendation} status={status} />
     </li>
   );
 }
@@ -65,7 +105,11 @@ function SuccessResults({ response }: { response: RideWindowSearchResponse }) {
       {hasWindows ? (
         <ol className="space-y-3">
           {response.windows.map((window) => (
-            <WindowCard key={`${window.date}-${window.startHour}`} window={window} />
+            <WindowCard
+              key={`${window.date}-${window.startHour}`}
+              window={window}
+              status={response.recommendationStatus}
+            />
           ))}
         </ol>
       ) : (
